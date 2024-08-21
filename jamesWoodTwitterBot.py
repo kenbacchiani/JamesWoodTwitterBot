@@ -30,8 +30,12 @@ else:
     for index, row in at_bats.iterrows():
         inning = row['inning']
         result = row['events']
-        exit_velocity = row['launch_speed'] if not pd.isna(row['launch_speed']) else "N/A"
-        tweet_content += f"Inning: {inning}, Result: {result}, Exit Velocity: {exit_velocity} MPH\n"
+        exit_velocity = row['launch_speed']
+        if pd.notna(exit_velocity):
+            tweet_content += (f"Inning: {inning}, Result: {result}, "
+                              f"Exit Velocity: {exit_velocity} MPH\n")
+        else:
+            tweet_content += (f"Inning: {inning}, Result: {result}\n")
     if len(tweet_content) > 280:
-        tweet_content = tweet_content[:277] + "..."  # Truncate if necessary
+        tweet_content = tweet_content[:277] + "..." 
     client.create_tweet(text=tweet_content)
