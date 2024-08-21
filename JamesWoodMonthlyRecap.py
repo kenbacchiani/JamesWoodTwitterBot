@@ -41,4 +41,4 @@ if total_at_bats > 0:
     client.create_tweet(text=recap)
     print(f"Tweeted: {recap}")
 else:
-    print(f"No at-bats found for {player_first_name} {player_name} this month.")
+    print(f"No at-bats found for James Wood this month.")
