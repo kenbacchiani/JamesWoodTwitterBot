@@ -28,15 +28,20 @@ if at_bats.empty:
     print(tweet)
 else:
     at_bats = at_bats.sort_values(by='inning')
-    tweet_content = f"James Wood's at-bats on {today.strftime('%B %d, %Y')}:\n"
+    tweet_content = f"James Wood's at-bats on {yesterday.strftime('%B %d, %Y')}:\n"
     for index, row in at_bats.iterrows():
         inning = row['inning']
         pitcherThrows = row['p_throws']
         pitcher_id = row['pitcher']
-        pitcher_Firstname = playerid_reverse_lookup([pitcher_id]).iloc[0]['name_first']
-        pitcher_Firstname = pitcher_Firstname[0].upper() + "."
-        pitcher_Lastname = playerid_reverse_lookup([pitcher_id]).iloc[0]['name_last']
-        pitcher_Lastname = pitcher_Lastname[0].upper() + pitcher_Lastname[1:]
+        pitcherDetails = playerid_reverse_lookup([pitcher_id])
+        if not pitcherDetails.empty:
+            pitcher_Firstname = playerid_reverse_lookup([pitcher_id]).iloc[0]['name_first']
+            pitcher_Firstname = pitcher_Firstname[0].upper() + "."
+            pitcher_Lastname = playerid_reverse_lookup([pitcher_id]).iloc[0]['name_last']
+            pitcher_Lastname = pitcher_Lastname[0].upper() + pitcher_Lastname[1:]
+        else:
+            pitcher_Firstname = "Unknown"
+            pitcher_Lastname = ""
         result = row['events']
         exit_velocity = row['launch_speed']
         if pd.notna(exit_velocity):
@@ -45,8 +50,10 @@ else:
         else:
             tweet_content += (f"Inning: {inning} vs {pitcherThrows}HP {pitcher_Firstname} {pitcher_Lastname}, Result: {result}\n")
     if len(tweet_content) >= 280:
+        print(tweet_content)
         client.create_tweet(text=tweet_content[:280])
     else:
+        print(tweet_content)
         client.create_tweet(text=tweet_content)
 
         
