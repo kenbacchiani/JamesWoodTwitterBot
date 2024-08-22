@@ -43,6 +43,10 @@ else:
             pitcher_Firstname = "Unknown"
             pitcher_Lastname = ""
         result = row['events']
+        if result == "field_out":
+            result = "Field Out"
+        else:
+            result = result[0].upper() + result[1:]
         exit_velocity = row['launch_speed']
         if pd.notna(exit_velocity):
             tweet_content += (f"Inning: {inning} vs {pitcherThrows}HP {pitcher_Firstname} {pitcher_Lastname}, Result: {result}, "
